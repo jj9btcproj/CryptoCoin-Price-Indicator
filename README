@@ -1,0 +1,63 @@
+Bitcoin-Price-Indicator
+--------------------------------------
+by jj9 
+
+if you feel the need to share some bitcoin thanks or love
+do so here. If you use this please credit it 
+
+send any bitcoin donations 
+
+1ECXwPU9umqtsBAQesBW9981mx6sipPmyL
+
+How to setup
+-------------------------------------------------------
+Go to directory and do
+    sudo sh installDependencies.sh
+    python setup.py
+
+
+How to run from command line:
+-------------------------------------------------------
+run the following command
+
+    btc-indicator
+
+
+
+or from the directory in the zip
+
+	python bitcoin-price-indicator.py
+
+
+Dependencies:
+-------------------------------------------------------
+
+You need to have installed these
+
+sudo apt-get install python python-setuptools 
+sudo apt-get install python-bs4
+
+
+Autostart 
+-------------------------------------------------------
+
+http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
+http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
+
+
+
+How the settings file works
+-------------------------------------------------------
+
+first number is the refresh time  in seconds
+second line is a boolean (true or false) for toggling the display of mtgox data
+third line is a boolean (true or false) for toggling the display of btc-e data
+fourth line is a boolean (true or false) for toggling the display of bitfloor data
+fifth line is a boolean (true or false) for toggling the display of bitcoin-24 data
+
+How to setup a launcher:
+-------------------------------------------------------
+
+-drag the desktop file into the launcher bar
+
+
