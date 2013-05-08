@@ -57,7 +57,8 @@ fifth line is a boolean (true or false) for toggling the display of bitcoin-24 d
 
 How to setup a launcher:
 -------------------------------------------------------
-
+- make a desktop file by running makeDesktopFile.sh
+	sh makeDesktopFile.sh
 -drag the desktop file into the launcher bar
 
 
