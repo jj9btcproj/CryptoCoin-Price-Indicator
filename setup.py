@@ -33,6 +33,8 @@ else:
     iconTemp =dirIn+"/res/bitcoinicon.png"
     indTemp =dirIn+"/bitcoin-price-indicator.py"
     deskTemp =dirIn+"/bitcoin-price-indicator.desktop"
+	
+	subprocess.call(['./makeDesktopFile.sh'])
 
     if not os.path.exists(HOME+"/.config/autostart/"):
 		subprocess.call(["mkdir", HOME+"/.config/autostart/"])
