@@ -34,7 +34,7 @@ else:
     indTemp =dirIn+"/bitcoin-price-indicator.py"
     deskTemp =dirIn+"/bitcoin-price-indicator.desktop"
 	
-	subprocess.call(['./makeDesktopFile.sh'])
+    subprocess.call(["sudo", "./makeDesktopFile.sh"])
 
     if not os.path.exists(HOME+"/.config/autostart/"):
 		subprocess.call(["mkdir", HOME+"/.config/autostart/"])
@@ -59,7 +59,7 @@ else:
         print "IO ERROR"
 
 
-    subprocess.call(['./setupAlias.sh'])
+    subprocess.call(["sudo", "./setupAlias.sh"])
     print "Script is located at : "+INDICATORFILE
     subprocess.call(["chmod","+x",INDICATORFILE])
     print " You can use that for auto start etc"
