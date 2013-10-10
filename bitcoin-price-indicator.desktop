@@ -1,15 +1,12 @@
 [Desktop Entry]
-Encoding=UTF-8
+Encoding=UTF-8 
 Version=1.0
 Name=Bitcoin Market Price Indicator
 Comment=Market price Indicator for Bitcoin
-Exec=python /home/j2/.local/share/applications/btc-price-indicator.py
-Icon=/home/j2/.local/share/applications/bitcoinicon.png
+Exec=python /home/richard/.local/share/applications/btc-price-indicator.py
+Icon=/home/richard/.local/share/applications/bitcoinicon.png
 Categories=GNOME;Application;Network;
 Type=Application
 Terminal=false
 X-Ayatana-Desktop-Shortcuts=Regular;
-Name[en_US]=bitcoin-price-indicator.deskto
-
-
-
+Name[en_US]=Bitcoin Market Price Indicator

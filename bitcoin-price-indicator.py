@@ -30,7 +30,7 @@ SETTINGSFILE = os.path.abspath(HOME+"/.local/share/applications/settingsBTC.txt"
 BAD_RETRIEVE = 0.00001
 
 class BitcoinPriceIndicator:
-    PING_FREQUENCY = 2 # seconds
+    PING_FREQUENCY = 120 # seconds
     showBTCE = True
     showMtGox = True
     showBitfloor = True
@@ -160,19 +160,17 @@ class BitcoinPriceIndicator:
         dataOut = ""
         priceNow = BAD_RETRIEVE
         if self.showMtGox:
-            priceNow = float(self.getMtGoxData())
+            priceNow = self.getMtGoxData()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
-            else:
-                priceNow = str(priceNow)+"USD"
             dataOut = dataOut + "|MtGox: "+ priceNow
         if self.showBTCE:
             priceNow = float(self.getBTCEBitcoinData())
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BTC-E: "+priceNow
+                priceNow = str(priceNow)
+            dataOut = dataOut + "|BTC-E: $"+priceNow
         if self.showBit24 :
             priceNow = float(self.getBit24BTCPrice())
             if priceNow == BAD_RETRIEVE:
@@ -196,7 +194,7 @@ class BitcoinPriceIndicator:
         try :
             web_page = urllib2.urlopen("http://data.mtgox.com/api/1/BTCUSD/ticker").read()
             data = json.loads(web_page)
-            lstMtGox = data['return']['last']['value']
+            lstMtGox = data['return']['last']['display']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
@@ -216,7 +214,7 @@ class BitcoinPriceIndicator:
                 ind = ind + 1
                 if ind < 2 :
                     if ind == 1 :
-                        lstBTCEprice = float((link.contents[0]).string[:-3])
+                        lstBTCEprice = float((link.contents[0]).string[:-5])
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
