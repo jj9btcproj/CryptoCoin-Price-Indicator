@@ -33,7 +33,7 @@ class BitcoinPriceIndicator:
     PING_FREQUENCY = 2 # seconds
     showBTCE = True
     showMtGox = True
-    showBitfloor = True
+    showBlockChain = True
     showBit24 = True
     dirInstall = os.path.abspath("./")
 
@@ -56,19 +56,20 @@ class BitcoinPriceIndicator:
             file.write('3 \n')
             file.write('True \n')
             file.write('True \n')
-            file.write('False \n')
-            file.write('False \n')
+            file.write('True \n')
+            file.write('True \n')
             file.close()
         f = open(SETTINGSFILE, 'r')
         lines = f.readlines()
+        print "Refresh rate:",int(lines[0]),"seconds"
         self.PING_FREQUENCY = int(lines[0])
-        print "Show MtGox: ",self.str2bool(lines[1].strip())
+        print "Show MtGox:",self.str2bool(lines[1].strip())
         self.showMtGox = self.str2bool(lines[1].strip())
-        print "Show BTC-E: ",self.str2bool(lines[2].strip())
+        print "Show BTC-E:",self.str2bool(lines[2].strip())
         self.showBTCE = self.str2bool(lines[2].strip())
-        print "Show BitFloor: ",self.str2bool(lines[3].strip())
-        self.showBitfloor = self.str2bool(lines[3].strip())
-        print "Show Bitcoin-24: ",self.str2bool(lines[4].strip())
+        print "Show BlockChain:",self.str2bool(lines[3].strip())
+        self.showBlockChain = self.str2bool(lines[3].strip())
+        print "Show Bitcoin-24:",self.str2bool(lines[4].strip())
         self.showBit24 = self.str2bool(lines[4].strip())
         f.close()
 
@@ -88,13 +89,13 @@ class BitcoinPriceIndicator:
         togBit24 = gtk.MenuItem("Show/Hide Bitcoin-24")
         togBit24.connect("activate", self.toggleBit24display)
         togBit24.show()
-        togBitfloor = gtk.MenuItem("Show/Hide BitFloor")
-        togBitfloor.connect("activate", self.toggleBitfloordisplay)
-        togBitfloor.show()
+        togBlockChain = gtk.MenuItem("Show/Hide BlockChain")
+        togBlockChain.connect("activate", self.toggleBlockChaindisplay)
+        togBlockChain.show()
         self.menu.append(togMtGox)
         self.menu.append(togBTCE)
         self.menu.append(togBit24)
-        self.menu.append(togBitfloor)
+        self.menu.append(togBlockChain)
 
         self.quit_item = gtk.MenuItem("Quit")
         self.quit_item.connect("activate", self.quit)
@@ -123,11 +124,11 @@ class BitcoinPriceIndicator:
             self.showBit24 = True
 
 	# toggle function for Bit24
-    def toggleBitfloordisplay(self, widget):
-        if self.showBitfloor:
-            self.showBitfloor = False
+    def toggleBlockChaindisplay(self, widget):
+        if self.showBlockChain:
+            self.showBlockChain = False
         else:
-            self.showBitfloor = True
+            self.showBlockChain = True
 
     def main(self):
         self.getNewPrices()
@@ -142,7 +143,7 @@ class BitcoinPriceIndicator:
             file.write(str(self.PING_FREQUENCY)+'\n')
             file.write(str(self.showMtGox)+'\n')
             file.write(str(self.showBTCE)+'\n')
-            file.write(str(self.showBitfloor)+'\n')
+            file.write(str(self.showBlockChain)+'\n')
             file.write(str(self.showBit24)+'\n')
             file.close()
         except IOError:
@@ -180,13 +181,13 @@ class BitcoinPriceIndicator:
             else:
                 priceNow = str(priceNow)+"USD"
             dataOut = dataOut + "|Bit-24: "+priceNow
-        if self.showBitfloor:
-            priceNow = float(self.getBitFloorBTCPrice())
+        if self.showBlockChain:
+            priceNow = float(self.getBlockChainBTCPrice())
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
                 priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BitFloor: "+priceNow
+            dataOut = dataOut + "|BlockChain: "+priceNow
         self.ind.set_label(dataOut)
         return True
 
@@ -205,31 +206,26 @@ class BitcoinPriceIndicator:
             print 'Decoding JSON has failed'
         return lstMtGox
 
-	# get btc-e data using beautiful soup to parse from main page
+	# get btc-e data using json
     def getBTCEBitcoinData(self):
         lstBTCEprice = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://btc-e.com/exchange/btc_usd").read()
-            soup = BeautifulSoup(web_page)
-            ind = 0
-            for link in soup.find_all('strong'):
-                ind = ind + 1
-                if ind < 2 :
-                    if ind == 1 :
-                        lstBTCEprice = float((link.contents[0]).string[:-3])
+            web_page = urllib2.urlopen("https://btc-e.com/api/2/btc_usd/ticker").read()
+            data = json.loads(web_page)
+            lstBTCEprice = data['ticker']['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
             print("URLERROR!")
         return lstBTCEprice
 
-	# get bitfloor data using json
-    def getBitFloorBTCPrice(self):
-        lstBitFloor = BAD_RETRIEVE
+	# get BlockChain data using json
+    def getBlockChainBTCPrice(self):
+        lstBlockChain = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://api.bitfloor.com/ticker/1").read()
+            web_page = urllib2.urlopen("https://blockchain.info/ticker").read()
             data = json.loads(web_page)
-            lstBitFloor = data['price']
+            lstBlockChain = data['USD']['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
@@ -237,15 +233,15 @@ class BitcoinPriceIndicator:
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
 
-        return float(lstBitFloor)
+        return float(lstBlockChain)
 
-	# get from bit24 using json
+	# get bit24 data using json
     def getBit24BTCPrice(self):
         lstBit24 = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://bitcoin-24.com/api/USD/ticker.json").read()
+            web_page = urllib2.urlopen(urllib2.Request("https://bitcoin-24.com/api/USD/ticker.json", None, {'User-Agent' : 'Mozilla/5.0'})).read()
             data = json.loads(web_page)
-            lstBit24 = data['ask']
+            lstBit24 = data['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
@@ -253,7 +249,6 @@ class BitcoinPriceIndicator:
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
         return float(lstBit24)
-
 
 if __name__ == "__main__":
     indicator = BitcoinPriceIndicator()
