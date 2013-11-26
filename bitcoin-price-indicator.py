@@ -2,7 +2,7 @@
 
 #	Bitcoin-Price-Indicator
 #--------------------------------------
-#	by jj9 
+#	by jj9, enhanced by RichHorrocks and Zapsoda
 #
 #	if you feel the need to share some bitcoin thanks or love
 #	do so here. If you use this please credit it 
@@ -33,8 +33,8 @@ class BitcoinPriceIndicator:
     PING_FREQUENCY = 2 # seconds
     showBTCE = True
     showMtGox = True
-    showBitfloor = True
-    showBit24 = True
+    showBlockChain = True
+    showBitStamp = True
     dirInstall = os.path.abspath("./")
 
     def __init__(self):
@@ -56,20 +56,21 @@ class BitcoinPriceIndicator:
             file.write('3 \n')
             file.write('True \n')
             file.write('True \n')
-            file.write('False \n')
-            file.write('False \n')
+            file.write('True \n')
+            file.write('True \n')
             file.close()
         f = open(SETTINGSFILE, 'r')
         lines = f.readlines()
+        print "Refresh rate:",int(lines[0]),"seconds"
         self.PING_FREQUENCY = int(lines[0])
-        print "Show MtGox: ",self.str2bool(lines[1].strip())
+        print "Show MtGox:",self.str2bool(lines[1].strip())
         self.showMtGox = self.str2bool(lines[1].strip())
-        print "Show BTC-E: ",self.str2bool(lines[2].strip())
+        print "Show BTC-E:",self.str2bool(lines[2].strip())
         self.showBTCE = self.str2bool(lines[2].strip())
-        print "Show BitFloor: ",self.str2bool(lines[3].strip())
-        self.showBitfloor = self.str2bool(lines[3].strip())
-        print "Show Bitcoin-24: ",self.str2bool(lines[4].strip())
-        self.showBit24 = self.str2bool(lines[4].strip())
+        print "Show BitStamp:",self.str2bool(lines[4].strip())
+        self.showBitStamp = self.str2bool(lines[4].strip())
+        print "Show BlockChain:",self.str2bool(lines[3].strip())
+        self.showBlockChain = self.str2bool(lines[3].strip())
         f.close()
 
 	# utility function for settings file grab 
@@ -85,16 +86,16 @@ class BitcoinPriceIndicator:
         togMtGox = gtk.MenuItem("Show/Hide MtGox")
         togMtGox.connect("activate", self.toggleMtGoxdisplay)
         togMtGox.show()
-        togBit24 = gtk.MenuItem("Show/Hide Bitcoin-24")
-        togBit24.connect("activate", self.toggleBit24display)
-        togBit24.show()
-        togBitfloor = gtk.MenuItem("Show/Hide BitFloor")
-        togBitfloor.connect("activate", self.toggleBitfloordisplay)
-        togBitfloor.show()
+        togBitStamp = gtk.MenuItem("Show/Hide BitStamp")
+        togBitStamp.connect("activate", self.toggleBitStampdisplay)
+        togBitStamp.show()
+        togBlockChain = gtk.MenuItem("Show/Hide BlockChain")
+        togBlockChain.connect("activate", self.toggleBlockChaindisplay)
+        togBlockChain.show()
         self.menu.append(togMtGox)
         self.menu.append(togBTCE)
-        self.menu.append(togBit24)
-        self.menu.append(togBitfloor)
+        self.menu.append(togBitStamp)
+        self.menu.append(togBlockChain)
 
         self.quit_item = gtk.MenuItem("Quit")
         self.quit_item.connect("activate", self.quit)
@@ -115,19 +116,19 @@ class BitcoinPriceIndicator:
         else:
             self.showMtGox = True
 
-	# toggle function for Bit24
-    def toggleBit24display(self, widget):
-        if self.showBit24:
-            self.showBit24 = False
+	# toggle function for BitStamp
+    def toggleBitStampdisplay(self, widget):
+        if self.showBitStamp:
+            self.showBitStamp = False
         else:
-            self.showBit24 = True
+            self.showBitStamp = True
 
-	# toggle function for Bit24
-    def toggleBitfloordisplay(self, widget):
-        if self.showBitfloor:
-            self.showBitfloor = False
+	# toggle function for BlockChain
+    def toggleBlockChaindisplay(self, widget):
+        if self.showBlockChain:
+            self.showBlockChain = False
         else:
-            self.showBitfloor = True
+            self.showBlockChain = True
 
     def main(self):
         self.getNewPrices()
@@ -142,8 +143,8 @@ class BitcoinPriceIndicator:
             file.write(str(self.PING_FREQUENCY)+'\n')
             file.write(str(self.showMtGox)+'\n')
             file.write(str(self.showBTCE)+'\n')
-            file.write(str(self.showBitfloor)+'\n')
-            file.write(str(self.showBit24)+'\n')
+            file.write(str(self.showBlockChain)+'\n')
+            file.write(str(self.showBitStamp)+'\n')
             file.close()
         except IOError:
             print " ERROR WRITING QUIT STATE"
@@ -160,33 +161,37 @@ class BitcoinPriceIndicator:
         dataOut = ""
         priceNow = BAD_RETRIEVE
         if self.showMtGox:
-            priceNow = float(self.getMtGoxData())
+            priceNow = self.getMtGoxData()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|MtGox: "+ priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "MtGox: "+priceNow
         if self.showBTCE:
-            priceNow = float(self.getBTCEBitcoinData())
+            priceNow = self.getBTCEBitcoinData()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BTC-E: "+priceNow
-        if self.showBit24 :
-            priceNow = float(self.getBit24BTCPrice())
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "BTC-E: "+priceNow
+        if self.showBitStamp :
+            priceNow = self.getBitStampBTCPrice()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|Bit-24: "+priceNow
-        if self.showBitfloor:
-            priceNow = float(self.getBitFloorBTCPrice())
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "Bitstamp: "+priceNow
+        if self.showBlockChain:
+            priceNow = self.getBlockChainBTCPrice()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BitFloor: "+priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "Blockchain: "+priceNow
         self.ind.set_label(dataOut)
         return True
 
@@ -203,33 +208,27 @@ class BitcoinPriceIndicator:
             print("URLERROR!")
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
-        return lstMtGox
-
-	# get btc-e data using beautiful soup to parse from main page
+        return "{0:,.2f}".format(float(lstMtGox))
+	# get btc-e data using json
     def getBTCEBitcoinData(self):
         lstBTCEprice = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://btc-e.com/exchange/btc_usd").read()
-            soup = BeautifulSoup(web_page)
-            ind = 0
-            for link in soup.find_all('strong'):
-                ind = ind + 1
-                if ind < 2 :
-                    if ind == 1 :
-                        lstBTCEprice = float((link.contents[0]).string[:-3])
+            web_page = urllib2.urlopen("https://btc-e.com/api/2/btc_usd/ticker").read()
+            data = json.loads(web_page)
+            lstBTCEprice = data['ticker']['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
             print("URLERROR!")
-        return lstBTCEprice
+        return "{0:,.2f}".format(float(lstBTCEprice))
 
-	# get bitfloor data using json
-    def getBitFloorBTCPrice(self):
-        lstBitFloor = BAD_RETRIEVE
+	# get BlockChain data using json
+    def getBlockChainBTCPrice(self):
+        lstBlockChain = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://api.bitfloor.com/ticker/1").read()
+            web_page = urllib2.urlopen("https://blockchain.info/ticker").read()
             data = json.loads(web_page)
-            lstBitFloor = data['price']
+            lstBlockChain = data['USD']['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
@@ -237,23 +236,22 @@ class BitcoinPriceIndicator:
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
 
-        return float(lstBitFloor)
+        return "{0:,.2f}".format(float(lstBlockChain))
 
-	# get from bit24 using json
-    def getBit24BTCPrice(self):
-        lstBit24 = BAD_RETRIEVE
+	# get BitStamp data using json
+    def getBitStampBTCPrice(self):
+        lstBitStamp = BAD_RETRIEVE
         try :
-            web_page = urllib2.urlopen("https://bitcoin-24.com/api/USD/ticker.json").read()
+            web_page = urllib2.urlopen("https://www.bitstamp.net/api/ticker").read()
             data = json.loads(web_page)
-            lstBit24 = data['ask']
+            lstBitStamp = data['last']
         except urllib2.HTTPError :
             print("HTTPERROR!")
         except urllib2.URLError :
             print("URLERROR!")
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
-        return float(lstBit24)
-
+        return "{0:,.2f}".format(float(lstBitStamp))
 
 if __name__ == "__main__":
     indicator = BitcoinPriceIndicator()

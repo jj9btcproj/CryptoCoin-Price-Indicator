@@ -1,4 +1,8 @@
-rm bitcoin-price-indicator.desktop
+#!/bin/bash
+#This script remakes the desktop file
+if [ -f bitcoin-price-indicator.desktop ]; then
+	rm bitcoin-price-indicator.desktop
+fi
 echo "[Desktop Entry]" >> bitcoin-price-indicator.desktop
 echo "Encoding=UTF-8 " >> bitcoin-price-indicator.desktop
 echo "Version=1.0" >> bitcoin-price-indicator.desktop
