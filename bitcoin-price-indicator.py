@@ -67,10 +67,10 @@ class BitcoinPriceIndicator:
         self.showMtGox = self.str2bool(lines[1].strip())
         print "Show BTC-E:",self.str2bool(lines[2].strip())
         self.showBTCE = self.str2bool(lines[2].strip())
-        print "Show BlockChain:",self.str2bool(lines[3].strip())
-        self.showBlockChain = self.str2bool(lines[3].strip())
         print "Show BitStamp:",self.str2bool(lines[4].strip())
         self.showBitStamp = self.str2bool(lines[4].strip())
+        print "Show BlockChain:",self.str2bool(lines[3].strip())
+        self.showBlockChain = self.str2bool(lines[3].strip())
         f.close()
 
 	# utility function for settings file grab 
@@ -123,7 +123,7 @@ class BitcoinPriceIndicator:
         else:
             self.showBitStamp = True
 
-	# toggle function for BitStamp
+	# toggle function for BlockChain
     def toggleBlockChaindisplay(self, widget):
         if self.showBlockChain:
             self.showBlockChain = False
@@ -161,33 +161,37 @@ class BitcoinPriceIndicator:
         dataOut = ""
         priceNow = BAD_RETRIEVE
         if self.showMtGox:
-            priceNow = float(self.getMtGoxData())
+            priceNow = self.getMtGoxData()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|MtGox: "+ priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "MtGox: "+priceNow
         if self.showBTCE:
-            priceNow = float(self.getBTCEBitcoinData())
+            priceNow = self.getBTCEBitcoinData()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BTC-E: "+priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "BTC-E: "+priceNow
         if self.showBitStamp :
-            priceNow = float(self.getBitStampBTCPrice())
+            priceNow = self.getBitStampBTCPrice()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BitStamp: "+priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "Bitstamp: "+priceNow
         if self.showBlockChain:
-            priceNow = float(self.getBlockChainBTCPrice())
+            priceNow = self.getBlockChainBTCPrice()
             if priceNow == BAD_RETRIEVE:
                 priceNow = "TempDown"
             else:
-                priceNow = str(priceNow)+"USD"
-            dataOut = dataOut + "|BlockChain: "+priceNow
+                priceNow = str(priceNow)+" USD"
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "Blockchain: "+priceNow
         self.ind.set_label(dataOut)
         return True
 
@@ -204,8 +208,7 @@ class BitcoinPriceIndicator:
             print("URLERROR!")
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
-        return lstMtGox
-
+        return "{0:,.2f}".format(float(lstMtGox))
 	# get btc-e data using json
     def getBTCEBitcoinData(self):
         lstBTCEprice = BAD_RETRIEVE
@@ -217,7 +220,7 @@ class BitcoinPriceIndicator:
             print("HTTPERROR!")
         except urllib2.URLError :
             print("URLERROR!")
-        return lstBTCEprice
+        return "{0:,.2f}".format(float(lstBTCEprice))
 
 	# get BlockChain data using json
     def getBlockChainBTCPrice(self):
@@ -233,7 +236,7 @@ class BitcoinPriceIndicator:
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
 
-        return float(lstBlockChain)
+        return "{0:,.2f}".format(float(lstBlockChain))
 
 	# get BitStamp data using json
     def getBitStampBTCPrice(self):
@@ -248,7 +251,7 @@ class BitcoinPriceIndicator:
             print("URLERROR!")
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             print 'Decoding JSON has failed'
-        return float(lstBitStamp)
+        return "{0:,.2f}".format(float(lstBitStamp))
 
 if __name__ == "__main__":
     indicator = BitcoinPriceIndicator()
