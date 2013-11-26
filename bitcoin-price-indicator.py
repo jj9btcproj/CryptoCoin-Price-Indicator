@@ -2,7 +2,7 @@
 
 #	Bitcoin-Price-Indicator
 #--------------------------------------
-#	by jj9 
+#	by jj9, enhanced by RichHorrocks and Zapsoda
 #
 #	if you feel the need to share some bitcoin thanks or love
 #	do so here. If you use this please credit it 

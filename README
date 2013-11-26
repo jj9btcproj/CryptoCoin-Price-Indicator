@@ -1,6 +1,6 @@
 Bitcoin-Price-Indicator
 --------------------------------------
-by jj9 
+by jj9 and modified by Zapsoda and 
 
 if you feel the need to share some bitcoin thanks or love
 do so here. If you use this please credit it 
@@ -11,54 +11,45 @@ send any bitcoin donations
 
 How to setup
 -------------------------------------------------------
-Go to directory and do
-    sudo sh installDependencies.sh
-    python setup.py
-
+1) Download the archive and extract it to a directory of your choice.
+2) open the terminal naviagte to the extracted folder
+3) run python setup.py
+4) If you navigated to the extracted folder you can use the default path when asked for the path to the extracted files
+5) If you want the indicatator to run on startup type Y and press enter when asked "Run on startup? (Y/N): "
 
 How to run from command line:
 -------------------------------------------------------
 run the following command
+	After you run the setup.py file a btc-indicator alias is created, You must open a new terminal window after the setup.py file or run the command ". ~/.bashrc" to refresh the alias list for the terminal.
 
-    btc-indicator
-
-
-
-or from the directory in the zip
-
-	python bitcoin-price-indicator.py
-
+	If the alias isnt working you can run the following command:
+	python ~/.local/share/applications/btc-price-indicator.py
 
 Dependencies:
 -------------------------------------------------------
+You need to have installed these, You can do so by running "./installDependencies"
 
-You need to have installed these
-
-sudo apt-get install python python-setuptools 
-sudo apt-get install python-bs4
+Or manually run these commands:
+	sudo apt-get install python python-setuptools 
+	sudo apt-get install python-bs4
 
 
 Autostart 
 -------------------------------------------------------
-
-http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
-http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
+If the setup.py file is making the indicator run on startup try these resources:
+	http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
+	http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
 
 
 
 How the settings file works
 -------------------------------------------------------
-
 first number is the refresh time  in seconds
 second line is a boolean (true or false) for toggling the display of mtgox data
 third line is a boolean (true or false) for toggling the display of btc-e data
-fourth line is a boolean (true or false) for toggling the display of bitfloor data
-fifth line is a boolean (true or false) for toggling the display of bitcoin-24 data
+fourth line is a boolean (true or false) for toggling the display of Bitstamp data
+fifth line is a boolean (true or false) for toggling the display of Blockchain data
 
 How to setup a launcher:
 -------------------------------------------------------
-- make a desktop file by running makeDesktopFile.sh
-	sh makeDesktopFile.sh
--drag the desktop file into the launcher bar
-
-
+The setup.py file creates a bitcoin-price-indicator.desktop file in the directory you extract the archive to, Make a launcher drag the file to your launcher bar.
