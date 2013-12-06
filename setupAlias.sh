@@ -1,5 +1,5 @@
 #!/bin/bash
-# Adds btc-indicator command to run the indicator
+# Adds cryptocoin-indicator command to run the indicator
 if grep -q cryptocoin-indicator= ~/.bashrc; then
 	exit 1
 fi
