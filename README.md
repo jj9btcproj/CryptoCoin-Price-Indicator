@@ -1,6 +1,7 @@
 CryptoCoin-Price-Indicator
 ==========
-by jj9 
+by 
+### jj9 
 
 generalizes and combines old btc version originally written in jj9 repo and enhanced by RichHorrocks and Zapsoda (btcapicalls/setupfile maintainance for old btc version)  and ltc version in other jj9 repo
 
@@ -10,7 +11,9 @@ do so here. If you use this please credit it
 send any donation tips to 
 
 BTC : 1ECXwPU9umqtsBAQesBW9981mx6sipPmyL
+
 LTC : LUJz8yaS4uL1zrzwARbA4CiMpAwbpUwWY6
+
 NMC : N1SKXkrcyhxVYwQGsbLTFMbGAgeqL2g9tZ
 
 How to setup
@@ -39,8 +42,7 @@ Dependencies:
 You need to have installed these, You can do so by running "./installDependencies"
 
 Or manually run these commands:
-	sudo apt-get install python python-setuptools 
-	sudo apt-get install python-bs4
+	sudo apt-get install python python-setuptools
 
 
 Autostart 
