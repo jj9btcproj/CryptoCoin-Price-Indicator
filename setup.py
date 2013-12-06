@@ -32,16 +32,18 @@ if removePack:
 else:
     dirIn = str(raw_input( "Basic Setup (Input anything other than *advanced* for basic setup):"))
     if not  'dvanced' in dirIn:
-        dirIn = '.'
-        subprocess.call(["sudo", "/" + dirIn + "/installDependencies.sh"])
-        print "Installing dependencies"
         dirApp = os.getcwd()
-        subprocess.call(["sudo", "/" + dirIn + "/makeDesktopFile.sh",dirApp])
-        print "Making desktop file, Run to launch ticker."
         dirIn = dirApp
+        subprocess.call(["sudo",  dirIn + "/installDependencies.sh"])
+        print "Installing dependencies"
+        subprocess.call(["sudo",  dirIn + "/makeDesktopFile.sh",dirApp])
+        print "Making desktop file, Run to launch ticker."
         deskTemp = dirIn+"/cryptocoin-price-indicator.desktop"
         settingsTemp = dirIn+"/res/settingsCryptoIndicator.dat"
         INDICATORFILE = os.path.abspath(dirIn+"/cryptocoin-price-indicator.py")
+        if not os.path.exists(HOME+"/.local/share/applications/"):
+            subprocess.call(["mkdir", HOME+"/.local/share/applications/"])
+            print "Making folder:",HOME+"/.local/share/applications/"
     else:
         dirIn = raw_input( "Enter directory of extracted zip file (default is current directory):")
 
@@ -75,10 +77,10 @@ else:
         deskTemp = dirIn+"/cryptocoin-price-indicator.desktop"
         settingsTemp = dirIn+"/res/settingsCryptoIndicator.dat"
 
-        subprocess.call(["sudo", "/" + dirIn + "/installDependencies.sh"])
+        subprocess.call(["sudo", dirIn + "/installDependencies.sh"])
         print "Installing dependencies"
 
-        subprocess.call(["sudo", "/" + dirIn + "/makeDesktopFile.sh"])
+        subprocess.call(["sudo",  dirIn + "/makeDesktopFile.sh"])
         print "Making desktop file, Run to launch ticker."
 
         if not os.path.exists(HOME+"/.local/share/applications/"):
