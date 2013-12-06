@@ -19,10 +19,15 @@ NMC : N1SKXkrcyhxVYwQGsbLTFMbGAgeqL2g9tZ
 How to setup
 ------
 1) Download the archive and extract it to a directory of your choice.
+
 2) open the terminal naviagte to the extracted folder
+
 3) run sudo sh installDependencies.sh
+
 4) run python setup.py
+
 5) If you navigated to the extracted folder you can use the default path when asked for the path to the extracted files
+
 6) If you want the indicatator to run on startup type Y and press enter when asked "Run on startup? (Y/N): "
 
 Screencaps
