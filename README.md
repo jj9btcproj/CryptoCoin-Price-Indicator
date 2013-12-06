@@ -20,7 +20,7 @@ How to setup
 ------
 1) Download the archive and extract it to a directory of your choice.
 
-2) open the terminal naviagte to the extracted folder
+2) open the terminal navigate to the extracted folder
 
 3) run sudo sh installDependencies.sh
 
