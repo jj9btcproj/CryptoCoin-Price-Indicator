@@ -5,7 +5,6 @@ if grep -q btc-indicator= ~/.bashrc; then
 fi
 echo " " >> ~/.bashrc
 echo "#" >> ~/.bashrc
-echo "#     BTC-Indicator" >> ~/.bashrc
+echo "#     CryptoCoin-Indicator" >> ~/.bashrc
 echo "#" >> ~/.bashrc
-echo "alias btc-indicator='python ~/.local/share/applications/btc-price-indicator.py'" >> ~/.bashrc
-eval $(source /home/kieth/.bashrc)
+echo "alias cryptocoin-indicator='python ~/.local/share/applications/cryptocoin-price-indicator.py'" >> ~/.bashrc
