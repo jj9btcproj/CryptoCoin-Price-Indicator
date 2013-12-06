@@ -1,17 +1,27 @@
 #!/bin/bash
-#This script remakes the desktop file
-if [ -f bitcoin-price-indicator.desktop ]; then
-	rm bitcoin-price-indicator.desktop
+# This creates a desktop file based on current directory.
+# -jj9.
+
+# remove old version
+rm cryptocoin-price-indicator.desktop
+
+# use current directory as directory with python file if no directory given
+if [ -z "$1" ]
+  then
+    currDir=$(pwd)
+else
+  currDir=$1
 fi
-echo "[Desktop Entry]" >> bitcoin-price-indicator.desktop
-echo "Encoding=UTF-8 " >> bitcoin-price-indicator.desktop
-echo "Version=1.0" >> bitcoin-price-indicator.desktop
-echo "Name=Bitcoin Market Price Indicator" >> bitcoin-price-indicator.desktop
-echo "Comment=Market price Indicator for Bitcoin" >> bitcoin-price-indicator.desktop
-echo "Exec=python /home/$(logname)/.local/share/applications/btc-price-indicator.py" >> bitcoin-price-indicator.desktop
-echo "Icon=/home/$(logname)/.local/share/applications/bitcoinicon.png" >> bitcoin-price-indicator.desktop
-echo "Categories=GNOME;Application;Network;" >> bitcoin-price-indicator.desktop
-echo "Type=Application" >> bitcoin-price-indicator.desktop
-echo "Terminal=false" >> bitcoin-price-indicator.desktop
-echo "X-Ayatana-Desktop-Shortcuts=Regular;" >> bitcoin-price-indicator.desktop
-echo "Name[en_US]=Bitcoin Market Price Indicator" >> bitcoin-price-indicator.desktop
+
+
+# create desktop file
+cp CryptoCoinIndicator.desktop cryptocoin-price-indicator.desktop
+echo "Exec="$currDir"/cryptocoin-price-indicator.py" >> cryptocoin-price-indicator.desktop
+echo "Icon="$currDir"/res/bitcoinicon.png" >> cryptocoin-price-indicator.desktop
+echo "Categories=Internet;" >> cryptocoin-price-indicator.desktop
+echo "Type=Application" >> cryptocoin-price-indicator.desktop
+echo "Terminal=false" >> cryptocoin-price-indicator.desktop
+echo "X-Ayatana-Desktop-Shortcuts=Regular;" >> cryptocoin-price-indicator.desktop
+echo "Name[en_US]=CryptoCoin Indicator" >> cryptocoin-price-indicator.desktop
+echo " " >> cryptocoin-price-indicator.desktop
+
