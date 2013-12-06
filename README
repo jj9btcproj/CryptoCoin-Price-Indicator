@@ -1,5 +1,5 @@
 CryptoCoin-Price-Indicator
---------------------------------------
+==========
 by jj9 
 
 generalizes and combines old btc version originally written in jj9 repo and enhanced by RichHorrocks and Zapsoda (btcapicalls/setupfile maintainance for old btc version)  and ltc version in other jj9 repo
@@ -14,7 +14,7 @@ LTC : LUJz8yaS4uL1zrzwARbA4CiMpAwbpUwWY6
 NMC : N1SKXkrcyhxVYwQGsbLTFMbGAgeqL2g9tZ
 
 How to setup
--------------------------------------------------------
+------
 1) Download the archive and extract it to a directory of your choice.
 2) open the terminal naviagte to the extracted folder
 3) run python setup.py
@@ -27,7 +27,7 @@ Screencaps
 ![ScreenShot](screenie2.png)
 
 How to run from command line:
--------------------------------------------------------
+------
 run the following command
 	After you run the setup.py file a btc-indicator alias is created, You must open a new terminal window after the setup.py file or run the command ". ~/.bashrc" to refresh the alias list for the terminal.
 
@@ -35,7 +35,7 @@ run the following command
 	python ~/.local/share/applications/btc-price-indicator.py
 
 Dependencies:
--------------------------------------------------------
+------
 You need to have installed these, You can do so by running "./installDependencies"
 
 Or manually run these commands:
@@ -44,7 +44,7 @@ Or manually run these commands:
 
 
 Autostart 
--------------------------------------------------------
+------
 If the setup.py file is making the indicator run on startup try these resources:
 	http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
 	http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
@@ -52,7 +52,7 @@ If the setup.py file is making the indicator run on startup try these resources:
 
 
 How the settings file works
--------------------------------------------------------
+------
 first number is the refresh time  in seconds
 second line is exchange for btc (mtgox,btce,bitstamp, etc)
 third line is a boolean (true or false) for toggling the display of btc data
@@ -62,5 +62,5 @@ sixth line is exchange for nmc (btce)
 seventh line is a boolean (true or false) for toggling the display of nmc data
 
 How to setup a launcher:
--------------------------------------------------------
+------
 The makeDesktopFile.sh file creates a cryptocoin-price-indicator.desktop file in the directory you extract the archive to, Make a launcher drag the file to your launcher bar.
