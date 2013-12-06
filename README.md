@@ -53,6 +53,7 @@ If the setup.py file is making the indicator run on startup try these resources:
 
 How the settings file works
 ------
+first line is the install directory
 first number is the refresh time  in seconds
 second line is exchange for btc (mtgox,btce,bitstamp, etc)
 third line is a boolean (true or false) for toggling the display of btc data
