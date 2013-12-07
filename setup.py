@@ -31,6 +31,7 @@ if removePack:
     print 'Removed files.'
 else:
     dirIn = str(raw_input( "Basic Setup (Input anything other than *advanced* for basic setup):"))
+    os.remove(SETTINGSFILE)
     if not  'dvanced' in dirIn:
         dirApp = os.getcwd()
         dirIn = dirApp
