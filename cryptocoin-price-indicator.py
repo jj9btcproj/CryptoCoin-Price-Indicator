@@ -83,7 +83,6 @@ class CryptoCoinPriceIndicator:
             print "LTC Mode now On"
         else:
             self.noLTC(widget)
-        self.getNewPricesLTC()
     def initNMCAddOn(self,widget):
         if (not self.NMCInit) or (widget is None):
             self.indNMC = appindicator.Indicator("new-nmccoin-indicator", self.NMCICON, appindicator.CATEGORY_APPLICATION_STATUS)
@@ -96,7 +95,6 @@ class CryptoCoinPriceIndicator:
             print "NMC Mode now On"
         else:
             self.noNMC(widget)
-        self.getNewPricesNMC()
 	# setup gtk menus to toggle display of data
     def menu_setup(self):
         self.menu = gtk.Menu()
@@ -127,11 +125,12 @@ class CryptoCoinPriceIndicator:
             self.nmcAdd.activate();
         self.nmcAdd.show();self.menu.append(self.nmcAdd)
 
+        self.getNewPricesBTC()
+        
         self.about = gtk.MenuItem("About"); self.about.connect("activate",self.menu_about_response);self.about.show()
         self.menu.append(self.about)
         self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
         self.menu.append(self.quit_item)
-        self.getNewPricesBTC()
 
     def menu_setupLTC(self):
         self.menuLTC = gtk.Menu()
@@ -146,6 +145,8 @@ class CryptoCoinPriceIndicator:
         self.menuLTC.append(self.btceLTC);#self.menuLTC.append(self.mtgoxLTC);
         self.setRefreshMenu(self.menuLTC)
 
+        self.getNewPricesLTC()
+        
         self.kill_LTC = gtk.MenuItem("LTC Off"); self.kill_LTC.connect("activate", self.noLTC); self.kill_LTC.show(); self.menuLTC.append(self.kill_LTC)
         self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
         self.menuLTC.append(self.quit_item)
@@ -164,6 +165,8 @@ class CryptoCoinPriceIndicator:
         self.menuNMC.append(self.btceNMC);#self.menuLTC.append(self.mtgoxLTC);
         self.setRefreshMenu(self.menuNMC)
 
+        self.getNewPricesNMC()
+        
         self.kill_NMC = gtk.MenuItem("NMC Off"); self.kill_NMC.connect("activate", self.noNMC); self.kill_NMC.show();self.menuNMC.append(self.kill_NMC)
         self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
         self.menuNMC.append(self.quit_item)
