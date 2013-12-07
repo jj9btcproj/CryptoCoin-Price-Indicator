@@ -141,7 +141,7 @@ else:
     makeAlias = str(raw_input( "Make indicator alias for terminal (Input anything other than *yes* to skip alias setup):"))
     if "yes" in makeAlias:
         try:
-            subprocess.call(["sudo", "/" + dirIn + "/setupAlias.sh"])
+            subprocess.call(["sudo", dirIn + "/setupAlias.sh",INDICATORFILE])
             print "---------------------------------"
             print "Indicator installed close terminal"
             print "To run script type: btc-indicator"
