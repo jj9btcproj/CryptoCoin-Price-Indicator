@@ -20,7 +20,7 @@ How to setup
 ------
 1) Download the archive and extract it to a directory of your choice.
 
-	This can be done by downloading using the download zip link on this page or the following in terminal
+This can be done by downloading using the download zip link on this page or the following in terminal
 	
 	wget https://github.com/jj9btcproj/CryptoCoin-Price-Indicator/archive/master.zip
 
