@@ -41,13 +41,13 @@ This can be done by downloading using the download zip link on this page or the 
 7) Troubleshooting: If you run into a problem with ownership on desktop file cryptocoin-price-indicator.desktop (a lock in the icon for the desktop file)
 
 	sudo chown $USER cryptocoin-price-indicator.desktop
-
+ 
 Screencaps
 ------
 ![ScreenShot](screenie1.png)
 ![ScreenShot](screenie2.png)
 
-How to run from command line:
+How to run from command line (If you setup using the default advanced install):
 ------
 run the following command
 	After you run the setup.py file a btc-indicator alias is created, You must open a new terminal window after the setup.py file or run the command ". ~/.bashrc" to refresh the alias list for the terminal.
@@ -60,12 +60,16 @@ Dependencies:
 You need to have installed these, You can do so by running "./installDependencies"
 
 Or manually run these commands:
+
 	sudo apt-get install python python-setuptools
+
+	sudo apt-get install python-appindicator
 
 
 Autostart 
 ------
 If the setup.py file is making the indicator run on startup try these resources:
+
 	http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
 	http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
 
