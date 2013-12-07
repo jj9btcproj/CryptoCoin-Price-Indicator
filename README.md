@@ -73,6 +73,7 @@ If the setup.py file is making the indicator run on startup try these resources:
 	http://askubuntu.com/questions/209913/how-to-make-a-program-autostart-at-every-login-on-12-10
 	http://askubuntu.com/questions/48321/how-do-i-start-applications-automatically-on-login
 
+or say yes in the autostart question when running setup.py 
 
 
 How the settings file works
