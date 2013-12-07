@@ -38,7 +38,7 @@ This can be done by downloading using the download zip link on this page or the 
 
 6) If you want the indicatator to run on startup type Y and press enter when asked "Run on startup? (Y/N): "
 
-7) Troubleshooting: If you run into a problem with ownership on desktop file cryptocoin-price-indicator.desktop
+7) Troubleshooting: If you run into a problem with ownership on desktop file cryptocoin-price-indicator.desktop (a lock in the icon for the desktop file)
 
 	sudo chown $USER cryptocoin-price-indicator.desktop
 
