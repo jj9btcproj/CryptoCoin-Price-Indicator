@@ -1,12 +1,14 @@
 import os
 import shutil
 from os.path import expanduser
+import os.path as ospath
 import subprocess
 from subprocess import call
 import codecs
 
 HOME = expanduser("~")
 
+USERNAME = ospath.split(HOME)[-1] 
 ICON = os.path.abspath(HOME+"/.local/share/applications/bitcoinicon.png")
 LTCICON = os.path.abspath(HOME+"/.local/share/applications/litecoinicon.png")
 NMCICON = os.path.abspath(HOME+"/.local/share/applications/nmcicon.png")
@@ -137,6 +139,7 @@ else:
     
     subprocess.call(["chmod","+x",INDICATORFILE])
     subprocess.call(["chmod","+x",DESKTOPFILE])
+    subprocess.call(["chown",USERNAME,DESKTOPFILE])
     print "Script is located at: "+INDICATORFILE
 
     try:
