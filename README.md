@@ -26,13 +26,18 @@ This can be done by downloading using the download zip link on this page or the 
 
 2) open the terminal navigate to the extracted folder
 
-3) run sudo sh installDependencies.sh
+3) run 
+	sudo sh installDependencies.sh
 
-4) run python setup.py
+4) run 
+	python setup.py
 
 5) If you navigated to the extracted folder you can use the default path when asked for the path to the extracted files
 
 6) If you want the indicatator to run on startup type Y and press enter when asked "Run on startup? (Y/N): "
+
+7) Troubleshooting: If you run into a problem with ownership on desktop file cryptocoin-price-indicator.desktop
+	sudo chown $USER cryptocoin-price-indicator.desktop
 
 Screencaps
 ------
