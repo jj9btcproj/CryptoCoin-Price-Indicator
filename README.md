@@ -24,7 +24,7 @@ How to setup
 
 2) open the terminal navigate to the extracted folder
 
-3) run sudo sh installDependencies.sh && chmod +X makeDesktopFile.sh
+3) run sudo sh installDependencies.sh
 
 4) run python setup.py
 
