@@ -41,7 +41,7 @@ else:
         deskTemp = dirIn+"/cryptocoin-price-indicator.desktop"
         settingsTemp = dirIn+"/res/settingsCryptoIndicator.dat"
         print "Installing dependencies"
-        subprocess.call(["sudo",  dirIn + "/makeDesktopFile.sh",dirApp])
+        subprocess.call(["sh",  dirIn + "/makeDesktopFile.sh",dirApp])
         subprocess.call(["chown",USERNAME,deskTemp])
         print "Making desktop file, Run to launch ticker."
         INDICATORFILE = os.path.abspath(dirIn+"/cryptocoin-price-indicator.py")
@@ -84,7 +84,7 @@ else:
         subprocess.call(["sudo", dirIn + "/installDependencies.sh"])
         print "Installing dependencies"
 
-        subprocess.call(["sudo",  dirIn + "/makeDesktopFile.sh"])
+        subprocess.call(["sh",  dirIn + "/makeDesktopFile.sh"])
         subprocess.call(["chown",USERNAME,deskTemp])
         print "Making desktop file, Run to launch ticker."
 
