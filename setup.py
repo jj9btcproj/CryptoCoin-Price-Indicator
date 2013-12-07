@@ -139,6 +139,22 @@ else:
     subprocess.call(["chmod","+x",DESKTOPFILE])
     print "Script is located at: "+INDICATORFILE
 
+    try:
+        print 'Make default settings file :',SETTINGSFILE
+        file = open(SETTINGSFILE, 'w')
+        file.write(dirApp+' \n')
+        file.write('30 \n')
+        file.write('mtgox \n')
+        file.write('True \n')
+        file.write('btce \n')
+        file.write('True \n')
+        file.write('btce \n')
+        file.write('True \n')
+        file.close()
+    except IOError:
+        print "IO ERROR"
+
+
     makeAlias = str(raw_input( "Make indicator alias for terminal (Input anything other than *yes* to skip alias setup):"))
     if "yes" in makeAlias:
         try:
