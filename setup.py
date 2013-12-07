@@ -143,7 +143,7 @@ else:
         print 'Make default settings file :',SETTINGSFILE
         file = open(SETTINGSFILE, 'w')
         file.write(dirApp+' \n')
-        file.write('30 \n')
+        file.write('10 \n')
         file.write('mtgox \n')
         file.write('True \n')
         file.write('btce \n')
