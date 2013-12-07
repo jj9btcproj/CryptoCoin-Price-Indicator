@@ -83,6 +83,7 @@ class CryptoCoinPriceIndicator:
             print "LTC Mode now On"
         else:
             self.noLTC(widget)
+        self.getNewPricesLTC()
     def initNMCAddOn(self,widget):
         if (not self.NMCInit) or (widget is None):
             self.indNMC = appindicator.Indicator("new-nmccoin-indicator", self.NMCICON, appindicator.CATEGORY_APPLICATION_STATUS)
@@ -95,6 +96,7 @@ class CryptoCoinPriceIndicator:
             print "NMC Mode now On"
         else:
             self.noNMC(widget)
+        self.getNewPricesNMC()
 	# setup gtk menus to toggle display of data
     def menu_setup(self):
         self.menu = gtk.Menu()
@@ -129,6 +131,7 @@ class CryptoCoinPriceIndicator:
         self.menu.append(self.about)
         self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
         self.menu.append(self.quit_item)
+        self.getNewPricesBTC()
 
     def menu_setupLTC(self):
         self.menuLTC = gtk.Menu()
