@@ -33,11 +33,15 @@ class CryptoCoinPriceIndicator:
     BTCICON = os.path.abspath(HOME+"/.local/share/applications/bitcoinicon.png")
     LTCICON = os.path.abspath(HOME+"/.local/share/applications/litecoinicon.png")
     NMCICON = os.path.abspath(HOME+"/.local/share/applications/nmcicon.png")
+    PPCICON = os.path.abspath(HOME+"/.local/share/applications/peercoinicon.png")
+    YACICON = os.path.abspath(HOME+"/.local/share/applications/yacoinicon.png")
     APPDIR = HOME+"/.local/share/applications/"
     APPNAME = 'CryptoCoin Indicator';VERSION = '0.5'
     BTCMODE = True; BTCInit = False;
     LTCMODE = True; LTCInit = False;
     NMCMODE = True; NMCInit = False;
+    PPCMODE = True; PPCInit = False;
+    YACMODE = True; YACInit = False;
 
     def __init__(self):
         self.initFromFile()
@@ -54,6 +58,10 @@ class CryptoCoinPriceIndicator:
             gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesLTC)
         if self.NMCMODE:
             gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesNMC)
+        if self.PPCMODE:
+            gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesPPC)
+        if self.YACMODE:
+            gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesYAC)
         gtk.main()
 
     def updateIndicators(self):
@@ -63,6 +71,10 @@ class CryptoCoinPriceIndicator:
             self.updateLTCIndicator()
         if self.NMCMODE:
             self.updateNMCIndicator()
+        if self.PPCMODE:
+            self.updatePPCIndicator()
+        if self.YACMODE:
+            self.updateYACIndicator()
 
     def updateBTCIndicator(self):
         self.getNewPricesBTC()
@@ -70,6 +82,10 @@ class CryptoCoinPriceIndicator:
         self.getNewPricesLTC()
     def updateNMCIndicator(self):
         self.getNewPricesNMC()
+    def updatePPCIndicator(self):
+        self.getNewPricesPPC()
+    def updateYACIndicator(self):
+        self.getNewPricesYAC()
 
     def initLTCAddOn(self,widget):
         if (not self.LTCInit) or (widget is None):
@@ -95,6 +111,30 @@ class CryptoCoinPriceIndicator:
             print "NMC Mode now On"
         else:
             self.noNMC(widget)
+    def initPPCAddOn(self,widget):
+        if (not self.PPCInit) or (widget is None):
+            self.indPPC = appindicator.Indicator("new-ppccoin-indicator", self.PPCICON, appindicator.CATEGORY_APPLICATION_STATUS)
+            self.indPPC.set_status(appindicator.STATUS_ACTIVE)
+            self.menu_setupPPC()
+            self.indPPC.set_menu(self.menuPPC)
+            if (not self.PPCMODE) and (widget is not None):
+                self.PPCMODE = True
+                gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesPPC)
+            print "PPC Mode now On"
+        else:
+            self.noPPC(widget)
+    def initYACAddOn(self,widget):
+        if (not self.YACInit) or (widget is None):
+            self.indYAC = appindicator.Indicator("new-yaccoin-indicator", self.YACICON, appindicator.CATEGORY_APPLICATION_STATUS)
+            self.indYAC.set_status(appindicator.STATUS_ACTIVE)
+            self.menu_setupYAC()
+            self.indYAC.set_menu(self.menuYAC)
+            if (not self.YACMODE) and (widget is not None):
+                self.YACMODE = True
+                gtk.timeout_add(self.PING_FREQUENCY * 1000, self.getNewPricesYAC)
+            print "YAC Mode now On"
+        else:
+            self.noYAC(widget)
 	# setup gtk menus to toggle display of data
     def menu_setup(self):
         self.menu = gtk.Menu()
@@ -124,6 +164,16 @@ class CryptoCoinPriceIndicator:
         if self.NMCMODE:
             self.nmcAdd.activate();
         self.nmcAdd.show();self.menu.append(self.nmcAdd)
+
+        self.ppcAdd = gtk.CheckMenuItem("PPC Price"); self.ppcAdd.connect("activate", self.initPPCAddOn);
+        if self.PPCMODE:
+            self.ppcAdd.activate();
+        self.ppcAdd.show();self.menu.append(self.ppcAdd)
+
+        self.yacAdd = gtk.CheckMenuItem("YAC Price"); self.yacAdd.connect("activate", self.initYACAddOn);
+        if self.YACMODE:
+            self.yacAdd.activate();
+        self.yacAdd.show();self.menu.append(self.yacAdd)
 
         self.getNewPricesBTC()
         
@@ -172,6 +222,46 @@ class CryptoCoinPriceIndicator:
         self.menuNMC.append(self.quit_item)
         self.NMCInit = True
 
+    def menu_setupPPC(self):
+        self.menuPPC = gtk.Menu()
+        self.PPCtickers = None
+        self.btcePPC = gtk.RadioMenuItem(self.PPCtickers,"BTC-E"); self.btcePPC.connect("activate", lambda x: self.toggleNMCdisplay("btce")); self.btcePPC.show()
+        self.PPCtickers = self.btcePPC
+        #self.mtgoxLTC = gtk.RadioMenuItem(self.LTCtickers,"MtGox"); self.mtgoxLTC.connect("activate", lambda x: self.toggleLTCdisplay("mtgox")); self.mtgoxLTC.show()
+        #self.BTCtickers = self.mtgoxBTC
+
+        defSetPPC = gtk.MenuItem("Choose exchange : "); defSetPPC.show()
+        self.menuPPC.append(defSetPPC)
+        self.menuPPC.append(self.btcePPC);#self.menuLTC.append(self.mtgoxLTC);
+        self.setRefreshMenu(self.menuPPC)
+
+        self.getNewPricesPPC()
+        
+        self.kill_PPC = gtk.MenuItem("PPC Off"); self.kill_PPC.connect("activate", self.noPPC); self.kill_PPC.show();self.menuPPC.append(self.kill_PPC)
+        self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
+        self.menuPPC.append(self.quit_item)
+        self.PPCInit = True
+
+    def menu_setupYAC(self):
+        self.menuYAC = gtk.Menu()
+        self.YACtickers = None
+        self.bterYAC = gtk.RadioMenuItem(self.YACtickers,"Bter"); self.bterYAC.connect("activate", lambda x: self.toggleYACdisplay("bter")); self.bterYAC.show()
+        self.YACtickers = self.bterYAC
+        #self.mtgoxLTC = gtk.RadioMenuItem(self.LTCtickers,"MtGox"); self.mtgoxLTC.connect("activate", lambda x: self.toggleLTCdisplay("mtgox")); self.mtgoxLTC.show()
+        #self.BTCtickers = self.mtgoxBTC
+
+        defSetYAC = gtk.MenuItem("Choose exchange : "); defSetYAC.show()
+        self.menuYAC.append(defSetYAC)
+        self.menuYAC.append(self.bterYAC);#self.menuLTC.append(self.mtgoxLTC);
+        self.setRefreshMenu(self.menuYAC)
+
+        self.getNewPricesYAC()
+        
+        self.kill_YAC = gtk.MenuItem("YAC Off"); self.kill_YAC.connect("activate", self.noYAC); self.kill_YAC.show();self.menuYAC.append(self.kill_YAC)
+        self.quit_item = gtk.MenuItem("Quit Indicator"); self.quit_item.connect("activate", self.quit); self.quit_item.show()
+        self.menuYAC.append(self.quit_item)
+        self.YACInit = True
+
     def noLTC(self,widget):
         self.indLTC.set_label("")
         self.indLTC.set_icon("")
@@ -184,6 +274,17 @@ class CryptoCoinPriceIndicator:
         self.NMCMODE = False
         self.NMCInit = False
 
+    def noPPC(self,widget):
+        self.indPPC.set_label("")
+        self.indPPC.set_icon("")
+        self.PPCMODE = False
+        self.PPCInit = False
+
+    def noYAC(self,widget):
+        self.indYAC.set_label("")
+        self.indYAC.set_icon("")
+        self.YACMODE = False
+        self.YACInit = False
 
     def setRefreshMenu(self,menuIn):
         refreshmenu = gtk.Menu()
@@ -224,6 +325,14 @@ class CryptoCoinPriceIndicator:
     def toggleNMCdisplay(self, exch):
         self.exchangeNMC = exch
 
+	# toggle function for exchanges
+    def togglePPCdisplay(self, exch):
+        self.exchangePPC = exch
+
+	# toggle function for exchanges
+    def toggleYACdisplay(self, exch):
+        self.exchangeYAC = exch
+
 	# function that is being called by main which will refresh data	
     def getNewPricesBTC(self):
         updatedRecently = self.update_priceBTC()
@@ -234,6 +343,13 @@ class CryptoCoinPriceIndicator:
     def getNewPricesNMC(self):
         updatedRecentlyNMC = self.update_priceNMC()
         return True
+    def getNewPricesPPC(self):
+        updatedRecentlyPPC = self.update_pricePPC()
+        return True
+    def getNewPricesYAC(self):
+        updatedRecentlyYAC = self.update_priceYAC()
+        return True
+
 
 	# build string to be used by indicator and update the display label
     def update_priceBTC(self):
@@ -328,6 +444,44 @@ class CryptoCoinPriceIndicator:
             self.indNMC.set_label(dataOut)
         return True
 
+    # build string to be used by indicator and update the display label
+    def update_pricePPC(self):
+        dataOut = ""
+        priceNow = BAD_RETRIEVE
+
+        priceNow = self.getBTCEDataUSD("ppc")
+        if priceNow == BAD_RETRIEVE:
+            priceNow = "TempDown"
+        else:
+            priceNow = str(priceNow)+" USD"
+        if "btce" in self.exchangePPC:
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "BTC-E: "+priceNow
+        self.btcePPC.set_label("BTC-E | "+str(priceNow))
+
+        if self.PPCMODE:
+            self.indPPC.set_label(dataOut)
+        return True
+
+    # build string to be used by indicator and update the display label
+    def update_priceYAC(self):
+        dataOut = ""
+        priceNow = BAD_RETRIEVE
+
+        priceNow = self.getBterDataBTC("yac")
+        if priceNow == BAD_RETRIEVE:
+            priceNow = "TempDown"
+        else:
+            priceNow = str(priceNow)+" USD"
+        if "bter" in self.exchangeYAC:
+            dataOut = dataOut + ' | ' if dataOut != "" else dataOut
+            dataOut = dataOut + "Bter: "+priceNow
+        self.bterYAC.set_label("Bter | "+str(priceNow))
+
+        if self.YACMODE:
+            self.indYAC.set_label(dataOut)
+        return True
+
 
 	# get mtgox data using JSON
     def getMtGoxData(self,coin):
@@ -349,7 +503,7 @@ class CryptoCoinPriceIndicator:
             print 'Decoding JSON has failed'
         return "{0:,.2f}".format(float(lstMtGox))
 	
-	# get btc-e data using json
+    # get btc-e data using json
     def getBTCEDataUSD(self,coin):
         lstBTCEprice = BAD_RETRIEVE
         try :
@@ -357,6 +511,8 @@ class CryptoCoinPriceIndicator:
                 web_page = urllib2.urlopen("https://btc-e.com/api/2/ltc_usd/ticker").read()
             elif coin is "nmc":
                 web_page = urllib2.urlopen("https://btc-e.com/api/2/nmc_usd/ticker").read()
+            elif coin is "ppc":
+                web_page = urllib2.urlopen("https://btc-e.com/api/2/ppc_usd/ticker").read()
             else:
                 web_page = urllib2.urlopen("https://btc-e.com/api/2/btc_usd/ticker").read()
             data = json.loads(web_page)
@@ -366,6 +522,23 @@ class CryptoCoinPriceIndicator:
         except urllib2.URLError :
             print("URLERROR!")
         return "{0:,.2f}".format(float(lstBTCEprice))
+
+    # get btc-e data using json
+    def getBTCEDataEUR(self,coin):
+        lstBTCEprice = BAD_RETRIEVE
+        try :
+            if coin is "ltc":
+                web_page = urllib2.urlopen("https://btc-e.com/api/2/ltc_eur/ticker").read()
+            else:
+                web_page = urllib2.urlopen("https://btc-e.com/api/2/btc_eur/ticker").read()
+            data = json.loads(web_page)
+            lstBTCEprice = data['ticker']['last']
+        except urllib2.HTTPError :
+            print("HTTPERROR!")
+        except urllib2.URLError :
+            print("URLERROR!")
+        return "{0:,.2f}".format(float(lstBTCEprice))
+
 
     # get btc-e data using json
     def getBTCEDataBTC(self,coin):
@@ -390,6 +563,32 @@ class CryptoCoinPriceIndicator:
         except urllib2.URLError :
             print("URLERROR!")
         return "{0:,.2f}".format(float(lstBTCEprice))
+
+    # get bter data using json
+    def getBterDataBTC(self,coin):
+        lstBterprice = BAD_RETRIEVE
+        try :
+            if coin is "nmc":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/nmc_btc").read()
+            elif coin is "yac":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/yac_btc").read()
+            elif coin is "nvc":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/nvc_btc").read()
+            elif coin is "xpm":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/xpm_btc").read()
+            elif coin is "ftc":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/ftc_btc").read()
+            elif coin is "ppc":
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/ppc_btc").read()
+            else:
+                web_page = urllib2.urlopen("http://data.bter.com/api/1/ticker/ltc_btc").read()
+            data = json.loads(web_page)
+            lstBterprice = data['last']
+        except urllib2.HTTPError :
+            print("HTTPERROR!")
+        except urllib2.URLError :
+            print("URLERROR!")
+        return "{0:,.2f}".format(float(lstBterprice))
 
 	# get BlockChain data using json
     def getBlockChainBTCPrice(self):
@@ -441,6 +640,10 @@ class CryptoCoinPriceIndicator:
             file.write('True \n')
             file.write('btce \n')
             file.write('True \n')
+            file.write('btce \n')
+            file.write('True \n')
+            file.write('bter \n')
+            file.write('True \n')
             file.close()
         f = open(SETTINGSFILE, 'r')
         lines = f.readlines()
@@ -459,12 +662,20 @@ class CryptoCoinPriceIndicator:
         print "NMC Exchange : ",(lines[6].strip()),"   Display :",self.str2bool(lines[7].strip())
         self.exchangeNMC = (lines[6].strip())
         self.NMCMODE = self.str2bool(lines[7].strip())
+        print "PPC Exchange : ",(lines[8].strip()),"   Display :",self.str2bool(lines[9].strip())
+        self.exchangePPC = (lines[8].strip())
+        self.PPCMODE = self.str2bool(lines[9].strip())
+        print "YAC Exchange : ",(lines[10].strip()),"   Display :",self.str2bool(lines[11].strip())
+        self.exchangeYAC = (lines[10].strip())
+        self.YACMODE = self.str2bool(lines[11].strip())
         f.close()
 
     def setAppDir(self,currDir):
         self.BTCICON = os.path.abspath(currDir+"/res/bitcoinicon.png")
         self.LTCICON = os.path.abspath(currDir+"/res/litecoinicon.png")
         self.NMCICON = os.path.abspath(currDir+"/res/nmcicon.png")
+        self.PPCICON = os.path.abspath(currDir+"/res/peercoinicon.png")
+        self.YACICON = os.path.abspath(currDir+"/res/yacoinicon.png")
         self.APPDIR = currDir
 
 	# utility function for settings file grab
@@ -486,6 +697,10 @@ class CryptoCoinPriceIndicator:
             file.write(str(self.LTCMODE)+'\n')
             file.write(str(self.exchangeNMC)+'\n')
             file.write(str(self.NMCMODE)+'\n')
+            file.write(str(self.exchangePPC)+'\n')
+            file.write(str(self.PPCMODE)+'\n')
+            file.write(str(self.exchangeYAC)+'\n')
+            file.write(str(self.YACMODE)+'\n')
             file.close()
         except IOError:
             print " ERROR WRITING QUIT STATE"
