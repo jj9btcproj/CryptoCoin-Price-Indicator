@@ -3,7 +3,7 @@ CryptoCoin-Price-Indicator
 by 
 ### jj9 (jbs)
 
-generalizes and combines old btc version originally written in jj9 repo and enhanced by RichHorrocks and Zapsoda (btcapicalls/setupfile maintainance for old btc version)  and ltc version in other jj9 repo
+generalizes and combines old btc version originally written in jj9 repo and enhanced by RichHorrocks and Zapsoda (btcapicalls/setupfile maintainance for old btc version)  and ltc version in other jj9 repo. Added peercoin support by sahtor.
 
 if you feel the need to share some bitcoin thanks or love
 do so here. If you use this please credit it 
